@@ -27,7 +27,7 @@ export default function createNavigationContainer(Component) {
 
       this._initialAction = NavigationActions.init();
 
-      if (this._isStateful()) {
+      if (this._isStateful(props)) {
         this.subs = BackHandler.addEventListener('hardwareBackPress', () => {
           if (!this._isMounted) {
             this.subs && this.subs.remove();
@@ -41,14 +41,14 @@ export default function createNavigationContainer(Component) {
       }
 
       this.state = {
-        nav: this._isStateful()
+        nav: this._isStateful(props)
           ? Component.router.getStateForAction(this._initialAction)
           : null,
       };
     }
 
-    _isStateful() {
-      return !this.props.navigation;
+    _isStateful(props) {
+      return !(props || this.props).navigation;
     }
 
     _validateProps(props) {
